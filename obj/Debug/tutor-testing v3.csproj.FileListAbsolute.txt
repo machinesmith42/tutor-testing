@@ -1,0 +1,10 @@
+C:\Users\Jason\source\repos\tutor-testing v3\bin\Debug\tutor-testing v3.exe.config
+C:\Users\Jason\source\repos\tutor-testing v3\bin\Debug\tutor-testing v3.exe
+C:\Users\Jason\source\repos\tutor-testing v3\bin\Debug\tutor-testing v3.pdb
+C:\Users\Jason\source\repos\tutor-testing v3\bin\Debug\Microsoft.Data.OData.dll
+C:\Users\Jason\source\repos\tutor-testing v3\bin\Debug\Microsoft.Data.Edm.dll
+C:\Users\Jason\source\repos\tutor-testing v3\obj\Debug\tutor-testing v3.csprojAssemblyReference.cache
+C:\Users\Jason\source\repos\tutor-testing v3\obj\Debug\tutor-testing v3.csproj.CoreCompileInputs.cache
+C:\Users\Jason\source\repos\tutor-testing v3\obj\Debug\tutor-testing v3.csproj.CopyComplete
+C:\Users\Jason\source\repos\tutor-testing v3\obj\Debug\tutor-testing v3.exe
+C:\Users\Jason\source\repos\tutor-testing v3\obj\Debug\tutor-testing v3.pdb
