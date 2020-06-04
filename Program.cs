@@ -19,16 +19,18 @@ namespace tutor_testing_v3{
         public static Presentation objPres = ppPresens.Open(AppDomain.CurrentDomain.BaseDirectory + "\\assets\\better powerpoint test v2.pptm", Microsoft.Office.Core.MsoTriState.msoFalse, Microsoft.Office.Core.MsoTriState.msoTrue, Microsoft.Office.Core.MsoTriState.msoTrue);
         public static Slides objSlides = objPres.Slides;
         public static SlideShowSettings objSSS = objPres.SlideShowSettings;
-        public static TutorDataSet db = new TutorDataSet();
+        
         public static TutorDataSet.AllTutorsDataTable tutorTable = new TutorDataSet.AllTutorsDataTable();
         public static TutorDataSet.ScheduleDataTable scheduleTable = new TutorDataSet.ScheduleDataTable();
         public static TutorDataSet.SubjectDataTable subjectTable = new TutorDataSet.SubjectDataTable();
 
         static void Main(string[] args) {
             Init();
+            MainLoop();
         }
         static void Init() {
-
+            TutorDataSet db = new TutorDataSet();
+            db.Clear();
             application.Visible = Microsoft.Office.Core.MsoTriState.msoTrue;
             objSSS.Run();
             AllTutorsTableAdapter tutorTableAdapt = new AllTutorsTableAdapter();
@@ -38,6 +40,27 @@ namespace tutor_testing_v3{
             SubjectTableAdapter subjectAdapt = new SubjectTableAdapter();
             subjectAdapt.Fill(subjectTable);
 
+        }
+        static void MainLoop() {
+            //while (true) {
+            DisplayTutors();
+            //}
+        }
+        static void DisplayTutors() {
+            int currentDay = (int)DateTime.Now.DayOfWeek;
+            var query =
+                from tutor in tutorTable.AsEnumerable()
+                join schedule in scheduleTable
+                on tutor.Field<int>("ID") equals schedule.Field<int>("ID")
+                where schedule.Field<int>("Day") == currentDay
+                select new {
+                    TutorID = tutor.Field <int> ("ID"),
+                    Name = tutor.Field <string> ("FirstName") + " " + tutor.Field <string> ("LastName")
+                };
+
+            foreach(var q in query) {
+                string printLine = q.Name + " " + q.TutorID.ToString();
+            }
         }
     }
 }
