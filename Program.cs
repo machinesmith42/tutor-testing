@@ -64,16 +64,20 @@ namespace tutor_testing_v3{
                 };
 
             foreach(var q in query) {
-                CreateSlide(tutorsSlide);
-
+                SlideRange slide = CreateSlide(tutorsSlide);
+                WriteToTextbox(slide, "TutorName", q.Name);
             }
         }
-        static void CreateSlide(int copyOfIndex) {
+        static SlideRange CreateSlide(int copyOfIndex) {
             SlideRange newSlide = objSlides[copyOfIndex].Duplicate();
             newSlide.SlideShowTransition.Hidden = MsoTriState.msoFalse;
             newSlide.Tags.Add("isCreated", "true");
             newSlide.MoveTo(objSlides.Count);
-
+            return newSlide;
+        }
+        static string WriteToTextbox(SlideRange slide, string textboxName, string inputString) {
+            slide.Shapes[textboxName].TextFrame.TextRange.Text = inputString;
+            return inputString;
         }
     }
 };
