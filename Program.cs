@@ -47,12 +47,14 @@ namespace tutor_testing_v3{
             //}
         }
         static void DisplayTutors() {
-            int currentDay = (int)DateTime.Now.DayOfWeek;
+            DateTime currentDayTime = DateTime.Now;
             var query =
                 from tutor in tutorTable.AsEnumerable()
                 join schedule in scheduleTable
                 on tutor.Field<int>("ID") equals schedule.Field<int>("ID")
-                where schedule.Field<int>("Day") == currentDay
+                where schedule.Field<int>("Day") == (int)currentDayTime.DayOfWeek + 1&&
+                schedule.Field<DateTime>("Start").TimeOfDay <= currentDayTime.TimeOfDay &&
+                schedule.Field<DateTime>("End").TimeOfDay >= currentDayTime.TimeOfDay
                 select new {
                     TutorID = tutor.Field <int> ("ID"),
                     Name = tutor.Field <string> ("FirstName") + " " + tutor.Field <string> ("LastName")
