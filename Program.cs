@@ -11,18 +11,21 @@ using DataTable = System.Data.DataTable;
 using System.Data.Common;
 using tutor_testing_v3.TutorDataSetTableAdapters;
 using System.Diagnostics;
+using Microsoft.Office.Core;
+using MsoTriState = Microsoft.Office.Core.MsoTriState;
 
 namespace tutor_testing_v3{
     class Program{
         public static Microsoft.Office.Interop.PowerPoint.Application application = new Microsoft.Office.Interop.PowerPoint.Application();
         public static Presentations ppPresens = application.Presentations;
-        public static Presentation objPres = ppPresens.Open(AppDomain.CurrentDomain.BaseDirectory + "\\assets\\better powerpoint test v2.pptm", Microsoft.Office.Core.MsoTriState.msoFalse, Microsoft.Office.Core.MsoTriState.msoTrue, Microsoft.Office.Core.MsoTriState.msoTrue);
+        public static Presentation objPres = ppPresens.Open(AppDomain.CurrentDomain.BaseDirectory + "\\assets\\better powerpoint test v2.pptm", MsoTriState.msoFalse, MsoTriState.msoTrue, MsoTriState.msoTrue);
         public static Slides objSlides = objPres.Slides;
         public static SlideShowSettings objSSS = objPres.SlideShowSettings;
         
         public static TutorDataSet.AllTutorsDataTable tutorTable = new TutorDataSet.AllTutorsDataTable();
         public static TutorDataSet.ScheduleDataTable scheduleTable = new TutorDataSet.ScheduleDataTable();
         public static TutorDataSet.SubjectDataTable subjectTable = new TutorDataSet.SubjectDataTable();
+        public static int tutorsSlide = 1;
 
         static void Main(string[] args) {
             Init();
@@ -61,8 +64,16 @@ namespace tutor_testing_v3{
                 };
 
             foreach(var q in query) {
-                string printLine = q.Name + " " + q.TutorID.ToString();
+                CreateSlide(tutorsSlide);
+
             }
         }
+        static void CreateSlide(int copyOfIndex) {
+            SlideRange newSlide = objSlides[copyOfIndex].Duplicate();
+            newSlide.SlideShowTransition.Hidden = MsoTriState.msoFalse;
+            newSlide.Tags.Add("isCreated", "true");
+            newSlide.MoveTo(objSlides.Count);
+
+        }
     }
-}
+};
