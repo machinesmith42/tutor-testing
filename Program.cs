@@ -21,11 +21,12 @@ namespace tutor_testing_v3{
         public static Presentation objPres = ppPresens.Open(AppDomain.CurrentDomain.BaseDirectory + "\\assets\\better powerpoint test v2.pptm", MsoTriState.msoFalse, MsoTriState.msoTrue, MsoTriState.msoTrue);
         public static Slides objSlides = objPres.Slides;
         public static SlideShowSettings objSSS = objPres.SlideShowSettings;
-        
+        public static SlideShowWindow objSSW;
         public static TutorDataSet.AllTutorsDataTable tutorTable = new TutorDataSet.AllTutorsDataTable();
         public static TutorDataSet.ScheduleDataTable scheduleTable = new TutorDataSet.ScheduleDataTable();
         public static TutorDataSet.SubjectDataTable subjectTable = new TutorDataSet.SubjectDataTable();
         public static int tutorsSlide = 1;
+        public static bool canDelete = false;
 
         static void Main(string[] args) {
             Init();
@@ -42,12 +43,30 @@ namespace tutor_testing_v3{
             scheduleAdapt.Fill(scheduleTable);
             SubjectTableAdapter subjectAdapt = new SubjectTableAdapter();
             subjectAdapt.Fill(subjectTable);
+            objSSW = objPres.SlideShowWindow;
+            
 
         }
         static void MainLoop() {
-            //while (true) {
-            DisplayTutors();
-            //}
+            while (true) {
+                if (objSSW.View.Slide.SlideIndex == 4 && canDelete) {
+                    DeleteSlides();
+                    canDelete = false;
+                } else if (objSSW.View.Slide.SlideIndex == 5) {
+                    canDelete = true;
+                    DisplayTutors();
+                }
+                
+            }
+        }
+        internal static dynamic CurrentSlide {
+            get {
+                if (application.Active == MsoTriState.msoTrue &&
+                    application.ActiveWindow.Panes[2].Active == MsoTriState.msoTrue) {
+                    return application.ActiveWindow.View.Slide.SlideIndex;
+                }
+                return null;
+            }
         }
         static void DisplayTutors() {
             DateTime currentDayTime = DateTime.Now;
@@ -78,6 +97,14 @@ namespace tutor_testing_v3{
         static string WriteToTextbox(SlideRange slide, string textboxName, string inputString) {
             slide.Shapes[textboxName].TextFrame.TextRange.Text = inputString;
             return inputString;
+        }
+        static int DeleteSlides() {
+            int numberDeleted = 0;
+            while(objSlides[objSlides.Count].Tags["isCreated"] == "true") {
+                numberDeleted++;
+                objSlides[objSlides.Count].Delete();
+            }
+            return numberDeleted;
         }
     }
 };
